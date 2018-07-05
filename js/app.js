@@ -1,3 +1,4 @@
+const canvasWidth = 505;			// Width of the canvas
 const rowHeight = 83;				// Height of stone-blocks
 const colWidth = 101;				// Width of stone-blocks
 
@@ -55,7 +56,17 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
-    this.myPlayer = 'images/char-princess-girl.png';
+	/*
+	*	The player has:
+	*	@param x - Random position on x axis along the canvas width
+	*	@param y - Fix position on Y axis
+	*/
+	this.x = getRandomValue(canvasWidth);
+	this.y = 400;
+
+    // The image for our player, this uses
+    // a helper we've provided to easily load images
+    this.player = 'images/char-princess-girl.png';
 };
 
 // TODO: Cred ca dt nu are ce cauta aici. Voi vedea.
@@ -65,6 +76,11 @@ Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+};
+
+// Draw the enemy on the screen, required method for game
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.player), this.x, this.y);
 };
 
 // TODO:
