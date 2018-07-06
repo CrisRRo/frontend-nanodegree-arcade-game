@@ -1,16 +1,22 @@
+// Canvas related variables
 const canvasWidth = 505;			// Width of the canvas
 const rowHeight = 83;				// Height of stone-blocks
 const colWidth = 101;				// Width of stone-blocks
 
-const yForFirstRow = 63;			// Enemy's position on first row
-const enemiesNo = 4;				// Number of enemies
+// Enemies related variables
 const allEnemies = [];				// Array to store all enemy objects
-
-const minSpeed = 100;				// Maximum speed for an enemy
+const enemiesNo = 4;				// Number of enemies
+const yForFirstRow = 63;			// Enemy's position on first row
+const minSpeed = 100;				// Minimum speed for an enemy
 const maxSpeed = 400;				// Maximum speed for an enemy
-const step = 25;					// The step of the player
+const enemyLength = 101;			// The length of an enemy
+const enemyHeight = 70;				// The height of an enemy
+
+// Player related variables
+let player;							// Store the player object
 const playerStartPositionY = 400; 	// The start position of the player on Y axis
-let player;						// Store the player object
+const step = 25;					// The step of the player
+
 
 /*	
 *	The 3 possible positions of the enemies on Y axis
@@ -49,7 +55,6 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-	//this.x < 505 ? this.x += this.speed * dt : this.x = -80;
 	if (this.x < 505) {
 		// Move the enemy to the right
 		this.x += this.speed * dt;
@@ -89,9 +94,11 @@ Player.prototype.update = function() {
 	// The player has arrived to the river
 	// Bring the player to the start position
 	if (this.y <= -15) {
-		this.x = getRandomValue(canvasWidth-100);
-		this.y = playerStartPositionY;
+		resetPlayerPosition();
 	}
+	
+	// There is a collision
+	checkCollisions();
 };
 
 // Draw the enemy on the screen, required method for game
@@ -158,4 +165,24 @@ function getRandomValue(interval, min = 0) {
 		// Returns a number between 'min' and 'interval' values (both included)
 		return Math.floor(Math.random() * (interval - min + 1)) + min;
 	}
+}
+
+// Bring the player to the start position
+function resetPlayerPosition() {
+	player.x = getRandomValue(canvasWidth-100);
+	player.y = playerStartPositionY;
+}
+
+function checkCollisions() {
+	/*
+	*	Find the position of every enemy and compare
+	*	the player's position with the enemy's position taking into
+	*	consideration the enemy body size: enemyLength and enemyHeight
+	*/
+	allEnemies.forEach(function(thisEnemy) {
+		if ((player.x >= thisEnemy.x - enemyLength/2) && (player.x <= thisEnemy.x + enemyLength/2) && (player.y >= thisEnemy.y - enemyHeight/2) && (player.y <= thisEnemy.y + enemyHeight/2)) {
+				// Positions matche => bring the player to the start position
+				resetPlayerPosition();
+		}
+	});
 }
