@@ -6,6 +6,7 @@ const yForFirstRow = 63;			// Enemy's position on first row
 const enemiesNo = 4;				// Number of enemies
 const allEnemies = [];				// Array to store all enemy objects
 
+const minSpeed = 100;				// Maximum speed for an enemy
 const maxSpeed = 450;				// Maximum speed for an enemy
 
 /*	
@@ -32,7 +33,7 @@ var Enemy = function() {
 	*/
 	this.x = - getRandomValue(colWidth);
 	this.y = getRandomValue(positionsOnYAxis);
-	this.speed = getRandomValue(maxSpeed);
+	this.speed = getRandomValue(maxSpeed, minSpeed);
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -45,6 +46,17 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+	//this.x < 505 ? this.x += this.speed * dt : this.x = -80;
+	if (this.x < 505) {
+		// Move the enemy to the right
+		this.x += this.speed * dt;
+	} else {
+		// The enemy is out of canvas
+		// Reinitialize the enemy's coordonates
+		this.x = - getRandomValue(colWidth);
+		this.y = getRandomValue(positionsOnYAxis);
+		this.speed = getRandomValue(maxSpeed, minSpeed);
+	}
 };
 
 // Draw the enemy on the screen, required method for game
@@ -61,7 +73,7 @@ var Player = function() {
 	*	@param x - Random position on x axis along the canvas width
 	*	@param y - Fix position on Y axis
 	*/
-	this.x = getRandomValue(canvasWidth);
+	this.x = getRandomValue(canvasWidth-100);
 	this.y = 400;
 
     // The image for our player, this uses
@@ -111,10 +123,12 @@ document.addEventListener('keyup', function(e) {
 });
 
 // Function to choose a value randomly from an array / interval of numbers
-function getRandomValue(interval) {
+function getRandomValue(interval, min = 0) {
 	if (Array.isArray(interval)) {
+		// Return one of the array's elements
 		return interval[Math.floor(Math.random() * interval.length)];
 	} else if (typeof interval === "number") {
-		return Math.floor(Math.random() * interval);
+		// Returns a number between 'min' and 'interval' values (both included)
+		return Math.floor(Math.random() * (interval - min + 1)) + min;
 	}
 }
