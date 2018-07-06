@@ -9,6 +9,8 @@ const allEnemies = [];				// Array to store all enemy objects
 const minSpeed = 100;				// Maximum speed for an enemy
 const maxSpeed = 400;				// Maximum speed for an enemy
 const step = 25;					// The step of the player
+const playerStartPositionY = 400; 	// The start position of the player on Y axis
+let player;						// Store the player object
 
 /*	
 *	The 3 possible positions of the enemies on Y axis
@@ -75,19 +77,21 @@ var Player = function() {
 	*	@param y - Fix position on Y axis
 	*/
 	this.x = getRandomValue(canvasWidth-100);
-	this.y = 400;
+	this.y = playerStartPositionY;
 
     // The image for our player, this uses
     // a helper we've provided to easily load images
     this.player = 'images/char-princess-girl.png';
 };
 
-// TODO: Cred ca dt nu are ce cauta aici. Voi vedea.
 // Update the player's position, required method for game
-Player.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+Player.prototype.update = function() {
+	// The player has arrived to the river
+	// Bring the player to the start position
+	if (this.y <= -15) {
+		this.x = getRandomValue(canvasWidth-100);
+		this.y = playerStartPositionY;
+	}
 };
 
 // Draw the enemy on the screen, required method for game
@@ -106,7 +110,7 @@ Player.prototype.handleInput = function(key) {
 			}
 			break;
 		case 'up':
-			if (this.y > 0) {
+			if (this.y > -15) {
 				this.y -= step;
 			}
 			break;
@@ -116,7 +120,7 @@ Player.prototype.handleInput = function(key) {
 			}
 			break;
 		case 'down':
-			if (this.y < 400) {
+			if (this.y < playerStartPositionY) {
 				this.y += step;
 			}
 			break;
@@ -130,7 +134,7 @@ for (let i = 0; i < enemiesNo; i++) {
 }
 
 // Place the player object in a variable called player
-const player = new Player();
+player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
