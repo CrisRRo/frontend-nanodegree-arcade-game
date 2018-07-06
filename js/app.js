@@ -7,7 +7,8 @@ const enemiesNo = 4;				// Number of enemies
 const allEnemies = [];				// Array to store all enemy objects
 
 const minSpeed = 100;				// Maximum speed for an enemy
-const maxSpeed = 450;				// Maximum speed for an enemy
+const maxSpeed = 400;				// Maximum speed for an enemy
+const step = 25;					// The step of the player
 
 /*	
 *	The 3 possible positions of the enemies on Y axis
@@ -83,7 +84,6 @@ var Player = function() {
 
 // TODO: Cred ca dt nu are ce cauta aici. Voi vedea.
 // Update the player's position, required method for game
-// Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -96,8 +96,31 @@ Player.prototype.render = function() {
 };
 
 // TODO:
-Player.prototype.handleInput = function() {
-	
+Player.prototype.handleInput = function(key) {
+	// Move the player according to the pressed key but
+	// keeping the player inside the canvas (see if clauses below)
+	switch(key) {
+		case 'left':
+			if (this.x > 0) {
+				this.x -= step;
+			}
+			break;
+		case 'up':
+			if (this.y > 0) {
+				this.y -= step;
+			}
+			break;
+		case 'right':
+			if (this.x < 402) {
+				this.x += step;
+			}
+			break;
+		case 'down':
+			if (this.y < 400) {
+				this.y += step;
+			}
+			break;
+	}
 }
 
 // Now instantiate your objects.
