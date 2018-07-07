@@ -91,7 +91,7 @@ var Player = function() {
 
 // Update the player's position, required method for game
 Player.prototype.update = function() {
-	// The player has arrived to the river
+	// The player wins - has arrived to the river
 	// Bring the player to the start position
 	if (this.y <= -15) {
 		resetPlayerPosition();
